@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* 
+background : rgb(24 24 27) TW: zinc-900
+lighter-background : rgb(39 39 42) TW: zinc-800
+text-white : color: rgb(238 242 255) TW: indigo-50
+accent : rgb(79 70 229) TW: indigo-600
+*/
+
+body {
+  background-color: rgb(24 24 27);
+  color: rgb(238 242 255);
+}

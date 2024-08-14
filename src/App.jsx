@@ -1,3 +1,5 @@
+import AppHeader from "./components/AppHeader";
+
 export default function App() {
-  return <div className="text-center text-xl">hello world</div>;
+  return <AppHeader />;
 }
