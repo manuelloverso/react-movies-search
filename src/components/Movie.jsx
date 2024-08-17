@@ -4,7 +4,7 @@ export default function Movie({ movie }) {
       <img
         className="w-16"
         src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
-        alt=""
+        alt={movie.title}
       />
 
       <div className="info">

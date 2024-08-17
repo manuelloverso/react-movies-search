@@ -10,6 +10,11 @@ export default function AppHeader({
 
   function submitForm(e) {
     e.preventDefault();
+
+    if (inputQuery.length < 1) {
+      setInputQuery("");
+      return;
+    }
     setIsSearched(true);
     setSearchQuery(inputQuery);
     setInputQuery("");

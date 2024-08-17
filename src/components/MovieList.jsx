@@ -1,24 +1,27 @@
 import { useEffect, useState } from "react";
 import Movie from "./Movie";
 import Loader from "./Loader";
+import MovieDetails from "./MovieDetails";
+
+const api_key = "84160a7353d1d37c7ead96a2fcac030a";
 
 export default function MovieList({ query, isSearched }) {
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [isFound, setIsFound] = useState(false);
   const [err, setErr] = useState(null);
+
+  /* selected movie */
+  const [selectedId, setSelectedId] = useState(null);
 
   useEffect(() => {
     if (!isSearched) return;
     setErr(null);
     setIsLoading(true);
-    async function searchMovie() {
+    async function fetchMovies() {
       try {
         const res = await fetch(
-          `https://api.themoviedb.org/3/search/movie?api_key=84160a7353d1d37c7ead96a2fcac030a&query=${query}`
+          `https://api.themoviedb.org/3/search/movie?api_key=${api_key}&query=${query}`
         );
-
-        console.log(res);
 
         if (!res.ok) throw new Error("Something went wrong, try again later");
 
@@ -35,30 +38,35 @@ export default function MovieList({ query, isSearched }) {
       }
     }
 
-    searchMovie();
+    fetchMovies();
   }, [query]);
 
   return (
     <div className="container mx-auto md:px-24">
       <div className="flex pt-10 ">
         <div className="movie-list w-1/2 p-6">
-          <div className="card rounded-lg bg-zinc-800 p-4">
+          <div
+            style={{ height: "75vh" }}
+            className="card rounded-lg bg-zinc-800 p-4 overflow-y-auto"
+          >
             {isLoading ? (
               <Loader />
             ) : err ? (
-              <span>{err}</span>
+              <div className="h-full flex items-center justify-center text-2xl font-semibold">
+                <span>{err}</span>
+              </div>
             ) : !isSearched ? (
-              <span>Search some films</span>
+              <div className="h-full flex items-center justify-center text-2xl font-semibold">
+                <span>Search some movies</span>
+              </div>
             ) : (
               <>
-                <h3 className="font-semibold text-2xl mb-3">
-                  Search results ⬇️
-                </h3>
                 <ul className="flex flex-col ">
                   {movies.map((movie) => (
                     <li
+                      onClick={() => setSelectedId(movie.id)}
                       key={movie.id}
-                      className="border-b border-gray-600 hover:bg-zinc-700"
+                      className="border-b border-gray-600 hover:bg-zinc-700 cursor-pointer"
                     >
                       <Movie movie={movie} />
                     </li>
@@ -68,7 +76,9 @@ export default function MovieList({ query, isSearched }) {
             )}
           </div>
         </div>
-        <div className="movie-details w-1/2 p-6"></div>
+        <div className="movie-details w-1/2 p-6">
+          {selectedId && <MovieDetails selectedId={selectedId} />}
+        </div>
       </div>
     </div>
   );
