@@ -1,10 +1,16 @@
 import { useState } from "react";
 import NavButton from "./NavButton";
 
-export default function AppHeader({ searchQuery, setSearchQuery }) {
+export default function AppHeader({
+  searchQuery,
+  setSearchQuery,
+  setIsSearched,
+}) {
   const [inputQuery, setInputQuery] = useState("");
+
   function submitForm(e) {
     e.preventDefault();
+    setIsSearched(true);
     setSearchQuery(inputQuery);
     setInputQuery("");
   }
