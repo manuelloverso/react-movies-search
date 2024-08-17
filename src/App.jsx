@@ -8,7 +8,6 @@ export default function App() {
   return (
     <>
       <AppHeader setSearchQuery={setSearchQuery} />
-      <StarRating />
       <MovieList query={searchQuery} />
     </>
   );
