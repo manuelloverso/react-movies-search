@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Loader from "./Loader";
 
-export default function MovieDetails({ selectedId }) {
+export default function MovieDetails({ selectedId, addToWatchedList }) {
   const [movie, setMovie] = useState(null);
   const [err, setErr] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -41,7 +41,7 @@ export default function MovieDetails({ selectedId }) {
   return (
     <div
       style={{ height: "75vh" }}
-      className="movie-details rounded-lg bg-zinc-800 p-4 overflow-y-auto"
+      className="movie-details rounded-xl bg-zinc-800 p-4 overflow-y-auto"
     >
       {isLoading ? (
         <Loader />
@@ -54,7 +54,7 @@ export default function MovieDetails({ selectedId }) {
           <span>There was an error, try again later.</span>
         </div>
       ) : (
-        <>
+        <div>
           <img
             className="w-full rounded-xl mb-4"
             src={
@@ -75,6 +75,13 @@ export default function MovieDetails({ selectedId }) {
             </span>{" "}
             {movie.origin_country[0]}
           </p>
+
+          {movie.genres.length > 0 && (
+            <p className="text-lg mb-3">
+              <span className="font-semibold text-indigo-600">Genres:</span>{" "}
+              {movie.genres.map((genre) => genre.name).join(", ")}
+            </p>
+          )}
 
           {movie.release_date && (
             <p className="text-lg mb-3">
@@ -107,7 +114,20 @@ export default function MovieDetails({ selectedId }) {
               {movie.revenue.toLocaleString("it-IT")}$
             </p>
           )}
-        </>
+
+          <div className="actions flex gap-3 mt-5">
+            <button
+              onClick={() => addToWatchedList(movie.id)}
+              className="p-2 font-semibold text-lg rounded-lg text-white bg-indigo-600"
+            >
+              I have watched it
+            </button>
+
+            <button className="p-2 font-semibold text-lg rounded-lg text-white bg-indigo-600">
+              I'll watch it
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );

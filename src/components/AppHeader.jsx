@@ -33,7 +33,7 @@ export default function AppHeader({
               value={inputQuery}
               onChange={(e) => setInputQuery(e.target.value)}
               type="text"
-              placeholder="search any movie or tv series.."
+              placeholder="Search for any movie or tv series.."
             />
             <button
               type="submit"
