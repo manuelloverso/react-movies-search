@@ -61,6 +61,9 @@ export default function MovieList({ query, isSearched, addToWatchedList }) {
               </div>
             ) : (
               <>
+                <p className="text-end text-indigo-600 text-xl font-medium">
+                  {movies.length} Movies found
+                </p>
                 <ul className="flex flex-col ">
                   {movies.map((movie) => (
                     <li
