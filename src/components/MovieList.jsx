@@ -2,16 +2,32 @@ import { useEffect, useState } from "react";
 import Movie from "./Movie";
 import Loader from "./Loader";
 import MovieDetails from "./MovieDetails";
+import WatchedMovies from "./WatchedMovies";
 
 const api_key = "84160a7353d1d37c7ead96a2fcac030a";
 
-export default function MovieList({ query, isSearched, addToWatchedList }) {
+export default function MovieList({ query, isSearched }) {
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [err, setErr] = useState(null);
-
   /* selected movie */
   const [selectedId, setSelectedId] = useState(null);
+  const [watchedList, setWatchedList] = useState([]);
+
+  const addToWatchedList = (movie, rating) => {
+    const { id, title, poster_path, runtime } = movie;
+    const newMovie = { id, title, poster_path, runtime, rating };
+    const found = watchedList.find((m) => m.id === newMovie.id);
+    if (found) return;
+    setWatchedList([...watchedList, newMovie]);
+    setSelectedId(null);
+  };
+
+  const removeFromWatchedList = (id) => {
+    const newArr = watchedList.filter((m) => m.id !== id);
+    setWatchedList(newArr);
+    console.log(newArr);
+  };
 
   useEffect(() => {
     if (!isSearched) return;
@@ -80,10 +96,17 @@ export default function MovieList({ query, isSearched, addToWatchedList }) {
           </div>
         </div>
         <div className="movie-details w-1/2 p-6">
-          {selectedId && (
+          {selectedId ? (
             <MovieDetails
+              setSelectedId={setSelectedId}
               selectedId={selectedId}
               addToWatchedList={addToWatchedList}
+            />
+          ) : (
+            <WatchedMovies
+              setSelectedId={setSelectedId}
+              removeFromWatchedList={removeFromWatchedList}
+              watchedList={watchedList}
             />
           )}
         </div>

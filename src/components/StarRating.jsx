@@ -1,17 +1,23 @@
 import { useState } from "react";
 
-export default function StarRating() {
+export default function StarRating({ addToWatchedList, movie }) {
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
 
+  function rate(rating) {
+    setRating(rating);
+
+    addToWatchedList(movie, rating);
+  }
+
   return (
-    <div className="star-rating p-4 flex gap-2 items-center">
+    <div className="star-rating bg-zinc-700 rounded-xl p-4 flex gap-2 justify-center items-center">
       <div className="stars flex h-8 items-center">
         {Array.from({ length: 10 }, (_, i) => (
           <span
             key={i}
             className="w-6 h-6 p-0.5"
-            onClick={() => setRating(i + 1)}
+            onClick={() => rate(i + 1)}
             onMouseEnter={() => setHoverRating(i + 1)}
             onMouseLeave={() => setHoverRating(0)}
           >
@@ -33,9 +39,6 @@ export default function StarRating() {
           </span>
         ))}
       </div>
-      <span className="font-semibold text-lg ">
-        {hoverRating || rating || ""}
-      </span>
     </div>
   );
 }

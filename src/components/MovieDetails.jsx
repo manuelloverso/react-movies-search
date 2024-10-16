@@ -1,10 +1,16 @@
 import { useEffect, useState } from "react";
 import Loader from "./Loader";
+import StarRating from "./StarRating";
 
-export default function MovieDetails({ selectedId, addToWatchedList }) {
+export default function MovieDetails({
+  selectedId,
+  addToWatchedList,
+  setSelectedId,
+}) {
   const [movie, setMovie] = useState(null);
   const [err, setErr] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [watched, setWatched] = useState(false);
 
   useEffect(() => {
     if (!selectedId) return;
@@ -37,12 +43,22 @@ export default function MovieDetails({ selectedId, addToWatchedList }) {
     }
 
     searchSelectedMovie();
+
+    return setWatched(false);
   }, [selectedId]);
   return (
     <div
       style={{ height: "75vh" }}
       className="movie-details rounded-xl bg-zinc-800 p-4 overflow-y-auto"
     >
+      <div className="sticky top-0 w-full h-3">
+        <button
+          onClick={() => setSelectedId(null)}
+          className="absolute z-10 text-xl font-medium right-0 bg-indigo-600 rounded-full px-2"
+        >
+          X
+        </button>
+      </div>
       {isLoading ? (
         <Loader />
       ) : err ? (
@@ -92,6 +108,13 @@ export default function MovieDetails({ selectedId, addToWatchedList }) {
             </p>
           )}
 
+          {movie.runtime && (
+            <p className="text-lg mb-3">
+              <span className="font-semibold text-indigo-600">Runtime:</span>{" "}
+              {movie.runtime} min
+            </p>
+          )}
+
           {movie.vote_average > 0 && (
             <p className="text-lg mb-3">
               <span className="font-semibold text-indigo-600">
@@ -115,17 +138,17 @@ export default function MovieDetails({ selectedId, addToWatchedList }) {
             </p>
           )}
 
-          <div className="actions flex gap-3 mt-5">
-            <button
-              onClick={() => addToWatchedList(movie.id)}
-              className="p-2 font-semibold text-lg rounded-lg text-white bg-indigo-600"
-            >
-              I have watched it
-            </button>
-
-            <button className="p-2 font-semibold text-lg rounded-lg text-white bg-indigo-600">
-              I'll watch it
-            </button>
+          <div className="actions text-center mt-5">
+            {watched ? (
+              <StarRating addToWatchedList={addToWatchedList} movie={movie} />
+            ) : (
+              <button
+                onClick={() => setWatched(true)}
+                className="p-2 font-semibold text-lg rounded-lg text-white bg-indigo-600"
+              >
+                I have watched it
+              </button>
+            )}
           </div>
         </div>
       )}
