@@ -37,6 +37,7 @@ body {
 }
 
 #close-details {
+  box-shadow: black 0 0 20px 2px;
   transition: padding 0.2s ease;
 }
 

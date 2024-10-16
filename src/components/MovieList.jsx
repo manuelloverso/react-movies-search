@@ -14,6 +14,11 @@ export default function MovieList({ query, isSearched }) {
   const [selectedId, setSelectedId] = useState(null);
   const [watchedList, setWatchedList] = useState([]);
 
+  useEffect(() => {
+    const list = JSON.parse(localStorage.getItem("list"));
+    if (list) setWatchedList(list);
+  }, []);
+
   const addToWatchedList = (movie, rating) => {
     const { id, title, poster_path, runtime } = movie;
     const newMovie = { id, title, poster_path, runtime, rating };
@@ -24,17 +29,22 @@ export default function MovieList({ query, isSearched }) {
       const updatedList = [...watchedList];
       updatedList[foundIndex] = { ...updatedList[foundIndex], rating };
       setWatchedList(updatedList);
+      localStorage.setItem("list", JSON.stringify(updatedList));
     } else {
       // Movie does not exist, add it to the list
-      setWatchedList([...watchedList, newMovie]);
+      setWatchedList([newMovie, ...watchedList]);
+      localStorage.setItem("list", JSON.stringify([newMovie, ...watchedList]));
     }
+
+    console.log(localStorage.getItem("list"));
+
     setSelectedId(null);
   };
 
   const removeFromWatchedList = (id) => {
     const newArr = watchedList.filter((m) => m.id !== id);
     setWatchedList(newArr);
-    console.log(newArr);
+    localStorage.setItem("list", JSON.stringify(newArr));
   };
 
   useEffect(() => {
@@ -67,8 +77,24 @@ export default function MovieList({ query, isSearched }) {
 
   return (
     <div className="container mx-auto md:px-24">
-      <div className="flex pt-10 ">
-        <div className="movie-list w-1/2 p-6">
+      <div className="flex flex-wrap pt-10 ">
+        <div className="movie-details w-full md:w-1/2 md:order-last p-6">
+          {selectedId ? (
+            <MovieDetails
+              watchedList={watchedList}
+              setSelectedId={setSelectedId}
+              selectedId={selectedId}
+              addToWatchedList={addToWatchedList}
+            />
+          ) : (
+            <WatchedMovies
+              setSelectedId={setSelectedId}
+              removeFromWatchedList={removeFromWatchedList}
+              watchedList={watchedList}
+            />
+          )}
+        </div>
+        <div className="movie-list w-full md:w-1/2 p-6">
           <div
             style={{ height: "75vh" }}
             className="cards bg-zinc-800 p-4 overflow-y-auto"
@@ -102,22 +128,6 @@ export default function MovieList({ query, isSearched }) {
               </>
             )}
           </div>
-        </div>
-        <div className="movie-details w-1/2 p-6">
-          {selectedId ? (
-            <MovieDetails
-              watchedList={watchedList}
-              setSelectedId={setSelectedId}
-              selectedId={selectedId}
-              addToWatchedList={addToWatchedList}
-            />
-          ) : (
-            <WatchedMovies
-              setSelectedId={setSelectedId}
-              removeFromWatchedList={removeFromWatchedList}
-              watchedList={watchedList}
-            />
-          )}
         </div>
       </div>
     </div>
