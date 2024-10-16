@@ -15,3 +15,31 @@ body {
   background-color: rgb(24 24 27);
   color: rgb(238 242 255);
 }
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #313131;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #515151;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #1f1f1f;
+}
+
+#close-details {
+  transition: padding 0.2s ease;
+}
+
+#close-details:hover {
+  padding: 10px 17px;
+}

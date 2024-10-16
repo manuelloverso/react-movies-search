@@ -17,9 +17,17 @@ export default function MovieList({ query, isSearched }) {
   const addToWatchedList = (movie, rating) => {
     const { id, title, poster_path, runtime } = movie;
     const newMovie = { id, title, poster_path, runtime, rating };
-    const found = watchedList.find((m) => m.id === newMovie.id);
-    if (found) return;
-    setWatchedList([...watchedList, newMovie]);
+    const foundIndex = watchedList.findIndex((m) => m.id === newMovie.id);
+
+    if (foundIndex !== -1) {
+      // Movie exists, so update its rating
+      const updatedList = [...watchedList];
+      updatedList[foundIndex] = { ...updatedList[foundIndex], rating };
+      setWatchedList(updatedList);
+    } else {
+      // Movie does not exist, add it to the list
+      setWatchedList([...watchedList, newMovie]);
+    }
     setSelectedId(null);
   };
 
@@ -63,7 +71,7 @@ export default function MovieList({ query, isSearched }) {
         <div className="movie-list w-1/2 p-6">
           <div
             style={{ height: "75vh" }}
-            className="card rounded-xl bg-zinc-800 p-4 overflow-y-auto"
+            className="cards bg-zinc-800 p-4 overflow-y-auto"
           >
             {isLoading ? (
               <Loader />
@@ -78,7 +86,7 @@ export default function MovieList({ query, isSearched }) {
             ) : (
               <>
                 <p className="text-end text-indigo-600 text-xl font-medium">
-                  {movies.length} Movies found
+                  {movies.length} movies found
                 </p>
                 <ul className="flex flex-col ">
                   {movies.map((movie) => (
@@ -98,6 +106,7 @@ export default function MovieList({ query, isSearched }) {
         <div className="movie-details w-1/2 p-6">
           {selectedId ? (
             <MovieDetails
+              watchedList={watchedList}
               setSelectedId={setSelectedId}
               selectedId={selectedId}
               addToWatchedList={addToWatchedList}

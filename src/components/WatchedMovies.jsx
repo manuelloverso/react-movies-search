@@ -3,11 +3,10 @@ export default function WatchedMovies({
   watchedList,
   setSelectedId,
 }) {
-  console.log(watchedList);
   return (
     <div
       style={{ height: "75vh" }}
-      className="movie-details rounded-xl bg-zinc-800 p-4 overflow-y-auto"
+      className="movie-details bg-zinc-800 p-4 overflow-y-auto"
     >
       <header className="bg-indigo-600 rounded-xl p-4 mb-3">
         <h3 className="text-center font-medium text-xl">Movies you watched</h3>

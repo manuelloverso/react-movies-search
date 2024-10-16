@@ -1,8 +1,12 @@
-import { useState } from "react";
+import { useDeferredValue, useEffect, useState } from "react";
 
-export default function StarRating({ addToWatchedList, movie }) {
+export default function StarRating({ addToWatchedList, movie, oldRating }) {
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
+
+  useEffect(() => {
+    if (oldRating) setRating(oldRating);
+  });
 
   function rate(rating) {
     setRating(rating);

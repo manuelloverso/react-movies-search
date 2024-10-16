@@ -6,16 +6,19 @@ export default function MovieDetails({
   selectedId,
   addToWatchedList,
   setSelectedId,
+  watchedList,
 }) {
   const [movie, setMovie] = useState(null);
   const [err, setErr] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [watched, setWatched] = useState(false);
+  const [isWatched, setIsWatched] = useState(false);
+
+  /* check if the film is already in the watched list */
+  const found = watchedList.find((m) => m.id === selectedId);
 
   useEffect(() => {
     if (!selectedId) return;
     setIsLoading(true);
-
     setErr(null);
 
     async function searchSelectedMovie() {
@@ -32,7 +35,6 @@ export default function MovieDetails({
         }
 
         const data = await res.json();
-        console.log(data);
         setMovie(data);
       } catch (err) {
         setErr(err.message);
@@ -44,16 +46,17 @@ export default function MovieDetails({
 
     searchSelectedMovie();
 
-    return setWatched(false);
+    setIsWatched(false);
   }, [selectedId]);
   return (
     <div
       style={{ height: "75vh" }}
-      className="movie-details rounded-xl bg-zinc-800 p-4 overflow-y-auto"
+      className="movie-details bg-zinc-800 p-4 overflow-y-auto"
     >
       <div className="sticky top-0 w-full h-3">
         <button
           onClick={() => setSelectedId(null)}
+          id="close-details"
           className="absolute z-10 text-xl font-medium right-0 bg-indigo-600 rounded-full px-2"
         >
           X
@@ -139,12 +142,16 @@ export default function MovieDetails({
           )}
 
           <div className="actions text-center mt-5">
-            {watched ? (
-              <StarRating addToWatchedList={addToWatchedList} movie={movie} />
+            {isWatched || found ? (
+              <StarRating
+                addToWatchedList={addToWatchedList}
+                oldRating={found?.rating}
+                movie={movie}
+              />
             ) : (
               <button
-                onClick={() => setWatched(true)}
-                className="p-2 font-semibold text-lg rounded-lg text-white bg-indigo-600"
+                onClick={() => setIsWatched(true)}
+                className="p-2 font-semibold text-lg rounded-lg text-white bg-indigo-600 hover:bg-indigo-800 transition-colors"
               >
                 I have watched it
               </button>
