@@ -3,6 +3,7 @@ import Movie from "./Movie";
 import Loader from "./Loader";
 import MovieDetails from "./MovieDetails";
 import WatchedMovies from "./WatchedMovies";
+import { motion } from "framer-motion";
 
 const api_key = "84160a7353d1d37c7ead96a2fcac030a";
 
@@ -116,13 +117,16 @@ export default function MovieList({ query, isSearched }) {
                 </p>
                 <ul className="flex flex-col ">
                   {movies.map((movie) => (
-                    <li
+                    <motion.li
+                      transition={{ duration: 0.2 }}
+                      initial={{ opacity: 0, scale: 0 }}
+                      animate={{ opacity: 1, scale: 1 }}
                       onClick={() => setSelectedId(movie.id)}
                       key={movie.id}
                       className="border-b border-gray-600 hover:bg-zinc-700 cursor-pointer"
                     >
                       <Movie movie={movie} />
-                    </li>
+                    </motion.li>
                   ))}
                 </ul>
               </>

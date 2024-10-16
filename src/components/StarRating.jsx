@@ -1,4 +1,6 @@
-import { useDeferredValue, useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+motion;
 
 export default function StarRating({ addToWatchedList, movie, oldRating }) {
   const [rating, setRating] = useState(0);
@@ -15,7 +17,12 @@ export default function StarRating({ addToWatchedList, movie, oldRating }) {
   }
 
   return (
-    <div className="star-rating bg-zinc-700 rounded-xl p-4 flex gap-2 justify-center items-center">
+    <motion.div
+      transition={{ duration: 0.2 }}
+      initial={{ opacity: 0, scale: 0 }}
+      animate={{ opacity: 1, scale: 1 }}
+      className="star-rating bg-zinc-700 rounded-xl p-4 flex gap-2 justify-center items-center"
+    >
       <div className="stars flex h-8 items-center">
         {Array.from({ length: 10 }, (_, i) => (
           <span
@@ -43,6 +50,6 @@ export default function StarRating({ addToWatchedList, movie, oldRating }) {
           </span>
         ))}
       </div>
-    </div>
+    </motion.div>
   );
 }
