@@ -48,6 +48,20 @@ export default function MovieDetails({
 
     setIsWatched(false);
   }, [selectedId]);
+
+  useEffect(() => {
+    const callback = (e) => {
+      if (e.code === "Escape") {
+        setSelectedId(null);
+        console.log("closing");
+      }
+    };
+    document.addEventListener("keydown", callback);
+
+    return () => {
+      document.removeEventListener("keydown", callback);
+    };
+  }, []);
   return (
     <div
       style={{ height: "75vh" }}

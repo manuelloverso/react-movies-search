@@ -48,6 +48,8 @@ export default function MovieList({ query, isSearched }) {
     localStorage.setItem("list", JSON.stringify(newArr));
   };
 
+  const controller = new AbortController();
+
   useEffect(() => {
     if (!isSearched) return;
     setErr(null);
@@ -55,7 +57,8 @@ export default function MovieList({ query, isSearched }) {
     async function fetchMovies() {
       try {
         const res = await fetch(
-          `https://api.themoviedb.org/3/search/movie?api_key=${api_key}&query=${query}`
+          `https://api.themoviedb.org/3/search/movie?api_key=${api_key}&query=${query}`,
+          { signal: controller.signal }
         );
 
         if (!res.ok) throw new Error("Something went wrong, try again later");
@@ -65,8 +68,11 @@ export default function MovieList({ query, isSearched }) {
         if (data.results.length == 0) throw new Error("No results found");
 
         setMovies(data.results);
+        setErr(null);
       } catch (err) {
-        setErr(err.message);
+        if (err.name !== "AbortError") {
+          setErr(err.message);
+        }
         console.error("my log: " + err);
       } finally {
         setIsLoading(false);
@@ -74,6 +80,10 @@ export default function MovieList({ query, isSearched }) {
     }
 
     fetchMovies();
+
+    return () => {
+      controller.abort();
+    };
   }, [query]);
 
   return (
