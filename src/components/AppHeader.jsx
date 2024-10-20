@@ -1,10 +1,6 @@
 import { useState } from "react";
 
-export default function AppHeader({
-  searchQuery,
-  setSearchQuery,
-  setIsSearched,
-}) {
+export default function AppHeader({ setSearchQuery, setIsSearched }) {
   const [inputQuery, setInputQuery] = useState("");
 
   function submitForm(e) {
@@ -20,7 +16,7 @@ export default function AppHeader({
   }
 
   return (
-    <header className=" px-4 pt-4 ">
+    <header className=" px-4 pt-4 updated">
       <div className=" container bg-indigo-600 p-8 mx-auto flex flex-wrap gap-3 justify-around rounded-xl items-center">
         <div className="logo text-2xl font-bold">Have you watched it?</div>
         <div className="search-bar ">

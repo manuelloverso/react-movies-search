@@ -13,12 +13,15 @@ export default function MovieList({ query, isSearched }) {
   const [err, setErr] = useState(null);
   /* selected movie */
   const [selectedId, setSelectedId] = useState(null);
-  const [watchedList, setWatchedList] = useState([]);
+  const [watchedList, setWatchedList] = useState(function () {
+    const list = JSON.parse(localStorage.getItem("list"));
+    return list;
+  });
 
-  useEffect(() => {
+  /*   useEffect(() => {
     const list = JSON.parse(localStorage.getItem("list"));
     if (list) setWatchedList(list);
-  }, []);
+  }, []); */
 
   const addToWatchedList = (movie, rating) => {
     const { id, title, poster_path, runtime } = movie;
@@ -37,8 +40,6 @@ export default function MovieList({ query, isSearched }) {
       localStorage.setItem("list", JSON.stringify([newMovie, ...watchedList]));
     }
 
-    console.log(localStorage.getItem("list"));
-
     setSelectedId(null);
   };
 
@@ -48,9 +49,9 @@ export default function MovieList({ query, isSearched }) {
     localStorage.setItem("list", JSON.stringify(newArr));
   };
 
-  const controller = new AbortController();
-
   useEffect(() => {
+    const controller = new AbortController();
+
     if (!isSearched) return;
     setErr(null);
     setIsLoading(true);
@@ -84,7 +85,7 @@ export default function MovieList({ query, isSearched }) {
     return () => {
       controller.abort();
     };
-  }, [query]);
+  }, [query, isSearched]);
 
   return (
     <div className="container mx-auto md:px-24">

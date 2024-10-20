@@ -8,7 +8,7 @@ export default function StarRating({ addToWatchedList, movie, oldRating }) {
 
   useEffect(() => {
     if (oldRating) setRating(oldRating);
-  });
+  }, [setRating, oldRating]);
 
   function rate(rating) {
     setRating(rating);
